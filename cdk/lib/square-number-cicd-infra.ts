@@ -22,25 +22,27 @@ export class SquareNumberApplicationsStage extends cdk.Stage {
     }
 }
 
-export class S3WriteStage extends cdk.Stage {
+// export class S3WriteStage extends cdk.Stage {
 
-    constructor(scope: Construct, id: string, props?: StageProps) {
-        super(scope, id);
+//     constructor(scope: Construct, id: string, props?: StageProps) {
+//         super(scope, id);
 
-        const lambdaBucket = new s3.Bucket(this, 'LambdaZipBucket');
-        new s3deploy.BucketDeployment(this, 'DeployFiles', {
-            sources: [s3deploy.Source.asset('./lambda.zip')],
-            destinationBucket: lambdaBucket
-        })
-    }
-}
+//         const lambdaBucket = new s3.Bucket(this, 'LambdaZipBucket');
+//         new s3deploy.BucketDeployment(this, 'DeployFiles', {
+//             sources: [s3deploy.Source.asset('./lambda.zip')],
+//             destinationBucket: lambdaBucket
+//         })
+//     }
+// }
 
 export class SquareNumberCicdInfraStack extends cdk.Stack {
     constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
         super(scope, id, props)
 
 		const sourceArtifact = new codepipeline.Artifact();
-		const cdkOutputArtifact = new codepipeline.Artifact();
+        const cdkOutputArtifact = new codepipeline.Artifact();
+        
+        const s3Artifact = new codepipeline.Artifact();
 
         const pipeline = new pipelines.CdkPipeline(this, 'CdkPipeline', {
             crossAccountKeys: false,
@@ -85,8 +87,16 @@ export class SquareNumberCicdInfraStack extends cdk.Stack {
 			project: project
         }));
         
-        const s3ZipStage = new S3WriteStage(this, 'S3ZipStage');
-        pipeline.addApplicationStage(s3ZipStage);
+        // const s3ZipStage = new S3WriteStage(this, 'S3ZipStage');
+        // pipeline.addApplicationStage(s3ZipStage);
+        const lambdaBucket = new s3.Bucket(this, 'LambdaZipBucket');
+
+        const s3ZipStage = pipeline.addStage('S3ZipStage');
+        s3ZipStage.addActions(new codepipeline_actions.S3DeployAction({
+           actionName: 'S3DeployZip',
+           input: s3Artifact,
+           bucket: lambdaBucket
+        }))
     
         let prodEnv = new SquareNumberApplicationsStage(this, 'Prod-env');
         const prodStage = pipeline.addApplicationStage(prodEnv);
