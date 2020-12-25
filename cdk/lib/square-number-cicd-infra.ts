@@ -83,7 +83,10 @@ export class SquareNumberCicdInfraStack extends cdk.Stack {
 			actionName: 'LambdaBuildAndZip',
 			input: sourceArtifact,
 			project: project
-		}));
+        }));
+        
+        const s3ZipStage = new S3WriteStage(this, 'S3ZipStage');
+        pipeline.addApplicationStage(s3ZipStage);
     
         let prodEnv = new SquareNumberApplicationsStage(this, 'Prod-env');
         const prodStage = pipeline.addApplicationStage(prodEnv);
