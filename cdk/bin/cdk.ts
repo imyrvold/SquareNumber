@@ -1,7 +1,9 @@
 #!/usr/bin/env node
 import 'source-map-support/register';
 import * as cdk from '@aws-cdk/core';
-import { SquareNumberStack } from '../lib/cdk-stack';
+import { SquareNumberCicdInfraStack } from '../lib/square-number-cicd-infra';
 
 const app = new cdk.App();
-new SquareNumberStack(app, 'SquareNumberStack');
+new SquareNumberCicdInfraStack(app, 'SquareNumberCicdInfraStack');
+
+app.synth();

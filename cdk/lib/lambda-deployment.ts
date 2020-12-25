@@ -1,0 +1,11 @@
+// import * as cdk from '@aws-cdk/core';
+// import { SquareNumberLambdaStack } from './square-number-lambda-stack';
+
+// export class LambdaDeploymentStage extends cdk.Stage {
+// 	constructor(scope: cdk.Construct, id: string, props?: cdk.StageProps) {
+// 		super(scope, id, props);
+		
+// 		const lambdaStack = new SquareNumberLambdaStack(this, 'SquareNumberLambdaStack');
+		
+// 	}
+// }
