@@ -8,6 +8,8 @@ import * as pipelines from '@aws-cdk/pipelines';
 import * as secretsmanager from '@aws-cdk/aws-secretsmanager';
 import { CfnOutput, Construct, StageProps } from '@aws-cdk/core';
 import { SquareNumberLambdaStack } from './square-number-lambda-stack';
+import * as s3 from '@aws-cdk/aws-s3';
+import * as s3deploy from '@aws-cdk/aws-s3-deployment';
 
 export class SquareNumberApplicationsStage extends cdk.Stage {
     public readonly urlOutput: CfnOutput;
@@ -17,6 +19,19 @@ export class SquareNumberApplicationsStage extends cdk.Stage {
 
         const lambdaStack = new SquareNumberLambdaStack(this, 'SquareNumberLambdaStack');
         this.urlOutput = lambdaStack.urlOutput;
+    }
+}
+
+export class S3WriteStage extends cdk.Stage {
+
+    constructor(scope: Construct, id: string, props?: StageProps) {
+        super(scope, id);
+
+        const lambdaBucket = new s3.Bucket(this, 'LambdaZipBucket');
+        new s3deploy.BucketDeployment(this, 'DeployFiles', {
+            sources: [s3deploy.Source.asset('./lambda.zip')],
+            destinationBucket: lambdaBucket
+        })
     }
 }
 
