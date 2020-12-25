@@ -104,9 +104,9 @@ export class SquareNumberCicdInfraStack extends cdk.Stack {
 				},
 				post_build: {
 					commands: [
-						'echo Build completed on `date`',
-						'echo Pushing the Docker image...',
-						`docker push ${repositoryUri}:$CODEBUILD_RESOLVED_SOURCE_VERSION`
+                        'echo Build completed on `date`',
+                        'echo copy zip file to cdk/',
+                        `cp .build/lambda/SquareNumber/lambda.zip cdk/`
 					]
 				}
 			}
