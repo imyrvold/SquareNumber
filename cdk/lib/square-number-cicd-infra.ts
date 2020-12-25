@@ -99,7 +99,7 @@ export class SquareNumberCicdInfraStack extends cdk.Stack {
 						'echo Build started on `date`',
                         'echo Building the Docker image...',
                         `docker run --rm --volume "$(pwd)/:/src" --workdir "/src/" public.ecr.aws/o8l5c1i1/swift:5.3.2-amazonlinux2 swift build --product SquareNumber -c release -Xswiftc -static-stdlib`,
-                        `scripts/package.sh`
+                        `scripts/package.sh SquareNumber`
 					]
 				},
 				post_build: {
