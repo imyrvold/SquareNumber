@@ -184,7 +184,10 @@ export class SquareNumberCicdInfraStack extends cdk.Stack {
                         `ls -al cdk/`
 					]
 				}
-			}
+            },
+            artifacts: {
+                files: ['lamda.zip']
+            }
 		});
 	}
 
