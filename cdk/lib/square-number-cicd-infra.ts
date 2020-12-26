@@ -182,11 +182,11 @@ export class SquareNumberCicdInfraStack extends cdk.Stack {
                         'echo copy zip file to cdk/',
                         `cp .build/lambda/SquareNumber/lambda.zip cdk/`,
                         `ls -al cdk/`
-					]
+                    ],
+                    artifacts: {
+                        files: ['lamda.zip']
+                    }                            
 				}
-            },
-            artifacts: {
-                files: ['lamda.zip']
             }
 		});
 	}
