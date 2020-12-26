@@ -180,7 +180,8 @@ export class SquareNumberCicdInfraStack extends cdk.Stack {
 					commands: [
                         'echo Build completed on `date`',
                         'echo copy zip file to cdk/',
-                        `cp .build/lambda/SquareNumber/lambda.zip cdk/`
+                        `cp .build/lambda/SquareNumber/lambda.zip cdk/`,
+                        `ls -al cdk/`
 					]
 				}
 			}
