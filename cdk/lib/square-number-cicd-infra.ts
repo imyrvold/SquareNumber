@@ -108,19 +108,16 @@ export class SquareNumberCicdInfraStack extends cdk.Stack {
         }));
 
         // Deploy - Local
-        const lambdaBucket = new s3.Bucket(this, 'LambdaZipBucket', {
-            removalPolicy: cdk.RemovalPolicy.DESTROY
-        });
+        // const lambdaBucket = new s3.Bucket(this, 'LambdaZipBucket', {
+        //     removalPolicy: cdk.RemovalPolicy.DESTROY
+        // });
 
-        new s3deploy.BucketDeployment(this, 'DeployFiles', {
-            sources: [s3deploy.Source.asset('./lambda.zip')],
-            destinationBucket: lambdaBucket
-        })
+        // new s3deploy.BucketDeployment(this, 'DeployFiles', {
+        //     sources: [s3deploy.Source.asset('./lambda.zip')],
+        //     destinationBucket: lambdaBucket
+        // })
 
-        new SquareNumberLambdaStack(this, 'SquareNumberLambdaStack', {
-            s3Bucket: lambdaBucket,
-            s3CodeFile: 'lambda.zip'
-        });
+        new SquareNumberLambdaStack(this, 'SquareNumberLambdaStack');
 
       
 		// const lambdaStage = new LambdaDeploymentStage(this, 'LambdaDeploy', {

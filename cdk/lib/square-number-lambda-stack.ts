@@ -11,10 +11,10 @@ export interface LambdaStackProps extends cdk.StackProps {
 
 export class SquareNumberLambdaStack extends cdk.Stack {
   public readonly urlOutput: CfnOutput;
-  readonly s3Bucket: s3.IBucket
-  readonly s3CodeFile: string
+  // readonly s3Bucket: s3.IBucket
+  // readonly s3CodeFile: string
 
-  constructor(scope: cdk.Construct, id: string, props: LambdaStackProps) {
+  constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
     // const lambdaBucket = s3.Bucket.fromBucketName(this, 'LambdaZipBucket', 'LambdaZipBucket');
@@ -25,7 +25,7 @@ export class SquareNumberLambdaStack extends cdk.Stack {
     // this.s3CodeFile = "lambda.zip"
 
     const squareNumberLambdaFunction = new lambda.Function(this, 'squareNumberLambdaFunction', {
-      code: lambda.Code.fromBucket(props.s3Bucket, props.s3CodeFile),
+      code: lambda.Code.fromAsset('./lambda.zip'),
       handler: 'SquareNumber.handler',
       runtime: lambda.Runtime.PROVIDED,
       tracing: lambda.Tracing.ACTIVE
