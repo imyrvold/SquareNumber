@@ -6,44 +6,12 @@ import * as apigatewayv2 from '@aws-cdk/aws-apigatewayv2';
 import { CfnOutput } from '@aws-cdk/core';
 import * as s3 from '@aws-cdk/aws-s3';
 import * as path from 'path';
-import { exec } from 'child_process';
-import { spawnSync, SpawnSyncOptions } from 'child_process';
-
-export interface LambdaStackProps extends cdk.StackProps {
-  s3Bucket: s3.IBucket; // bucket where the code file is located
-  s3CodeFile: string; // zip file for the lambda function in the s3Bucket
-}
 
 export class SquareNumberLambdaStack extends cdk.Stack {
-  // public readonly urlOutput: CfnOutput;
-  // readonly s3Bucket: s3.IBucket
-  // readonly s3CodeFile: string
-
   constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
     const dockerfile = '../';
-    // const dockerfile = path.join(__dirname, '../../');
-    // const environment = {
-    //   CGO_ENABLED: '0',
-    //   GOOS: 'linux',
-    //   GOARCH: 'amd64',
-    // };
-
-    // const lambdaBucket = s3.Bucket.fromBucketName(this, 'LambdaZipBucket', 'LambdaZipBucket');
-
-    // this.s3Bucket = new s3.Bucket(this, 'LambdaZipBucket', {
-    //   removalPolicy: cdk.RemovalPolicy.DESTROY
-    // });
-    // this.s3CodeFile = "lambda.zip"
-
-    // const squareNumberLambdaFunction = new lambda.Function(this, 'squareNumberLambdaFunction', {
-    //   code: lambda.Code.fr
-    //   // code: lambda.Code.fromAsset('./lambda.zip'),
-    //   handler: 'SquareNumber.handler',
-    //   runtime: lambda.Runtime.PROVIDED,
-    //   tracing: lambda.Tracing.ACTIVE
-    // })
 
     const squareNumberLambdaFunction = new lambda.DockerImageFunction(this, 'SquareNumberLambdaFunction', {
       code: lambda.DockerImageCode.fromImageAsset(dockerfile)
