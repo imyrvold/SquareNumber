@@ -11,7 +11,6 @@ import { SquareNumberLambdaStack, LambdaStackProps } from './square-number-lambd
 import * as s3 from '@aws-cdk/aws-s3';
 import * as s3deploy from '@aws-cdk/aws-s3-deployment';
 import { LambdaDeploymentStage } from './lambda-deployment';
-// import { LambdaDeploymentStage } from './lambda-deployment'
 
 // export class SquareNumberApplicationsStage extends cdk.Stage {
 //     public readonly urlOutput: CfnOutput;
@@ -120,8 +119,8 @@ export class SquareNumberCicdInfraStack extends cdk.Stack {
         //     destinationBucket: lambdaBucket
         // })
 
-     /*   const lambdaStage = new LambdaDeploymentStage(this, 'LambdaDeploymentStage');
-        pipeline.addApplicationStage(lambdaStage);*/
+        const lambdaStage = new LambdaDeploymentStage(this, 'LambdaDeploymentStage');
+        pipeline.addApplicationStage(lambdaStage);
         // new SquareNumberLambdaStack(this, 'SquareNumberLambdaStack');
 
       
