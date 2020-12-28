@@ -165,6 +165,7 @@ export class SquareNumberCicdInfraStack extends cdk.Stack {
 					commands: [
 						'echo Logging in to Amazon ECR...',
                         '$(aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION)',
+                        '$(aws ecr-public get-login --no-include-email --region us-east-1',
                         'chmod +x scripts/package.sh'
 					]
 				},

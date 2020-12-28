@@ -22,7 +22,7 @@ export class SquareNumberLambdaStack extends cdk.Stack {
   constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
-    const entry = path.join(__dirname, '../');
+    const dockerfile = path.join(__dirname, './');
     // const environment = {
     //   CGO_ENABLED: '0',
     //   GOOS: 'linux',
@@ -43,23 +43,9 @@ export class SquareNumberLambdaStack extends cdk.Stack {
     //   runtime: lambda.Runtime.PROVIDED,
     //   tracing: lambda.Tracing.ACTIVE
     // })
-    const squareNumberLambdaFunction = new lambda.Function(this, 'SquareNumberLambdaFunction', {
-      code: lambda.Code.fromAsset(entry, {
-        bundling: {
-          image: lambda.Runtime.PROVIDED_AL2.bundlingDockerImage, // amazonlinux2
-          workingDirectory: '/src',
-          command: [
-            'bash', '-c', [
-              'swift build --product SquareNumber -c release -Xswiftc -static-stdlib',
-              'scripts/package.sh SquareNumber',
-              'cp .build/lambda/SquareNumber/lambda.zip cdk/'
-            ].join(' && ')
-          ]
-        }
-      }),
-      handler: 'SquareNumber.handler',
-      runtime: lambda.Runtime.PROVIDED,
-      tracing: lambda.Tracing.ACTIVE
+
+    const squareNumberLambdaFunction = new lambda.DockerImageFunction(this, 'SquareNumberLambdaFunction', {
+      code: lambda.DockerImageCode.fromImageAsset(dockerfile)
     });
 
     // const api = new apigatewayv2.HttpApi(this, 'SquareNumberApi', {
