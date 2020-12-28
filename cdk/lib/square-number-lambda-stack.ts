@@ -1,6 +1,6 @@
 import * as cdk from '@aws-cdk/core';
 import * as lambda from '@aws-cdk/aws-lambda';
-import { LambdaIntegration, RestApi } from '@aws-cdk/aws-apigateway';
+// import { LambdaProxyIntegration } from '@aws-cdk/aws-apigateway2';
 import * as apigatewayv2 from '@aws-cdk/aws-apigatewayv2';
 
 import { CfnOutput } from '@aws-cdk/core';
@@ -62,23 +62,23 @@ export class SquareNumberLambdaStack extends cdk.Stack {
       tracing: lambda.Tracing.ACTIVE
     });
 
-    const api = new apigatewayv2.HttpApi(this, 'SquareNumberApi', {
-      createDefaultStage: true,
-      corsPreflight: {
-        allowMethods: [ apigatewayv2.HttpMethod.GET ],
-        allowOrigins: ['*']
-      }
-    });
+    // const api = new apigatewayv2.HttpApi(this, 'SquareNumberApi', {
+    //   createDefaultStage: true,
+    //   corsPreflight: {
+    //     allowMethods: [ apigatewayv2.HttpMethod.GET ],
+    //     allowOrigins: ['*']
+    //   }
+    // });
 
-    api.addRoutes({
-      path: '/hello',
-      integration: new apigatewayv2.LambdaProxyIntegration({
-        handler
-      }),
-      methods: [apigatewayv2.HttpMethod.GET]
-    });
+    // api.addRoutes({
+    //   path: '/hello',
+    //   integration: new apigatewayv2.LambdaProxyIntegration({
+    //     handler
+    //   }),
+    //   methods: [apigatewayv2.HttpMethod.GET]
+    // });
 
-    new cdk.CfnOutput(this, 'ApiUrlOutput', { value: api.url! });
+    // new cdk.CfnOutput(this, 'ApiUrlOutput', { value: api.url! });
   }
 }
 
