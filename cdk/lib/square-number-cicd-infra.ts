@@ -64,6 +64,7 @@ export class SquareNumberCicdInfraStack extends cdk.Stack {
 
 		const sourceArtifact = new codepipeline.Artifact();
         const cdkOutputArtifact = new codepipeline.Artifact();
+        const buildArtifact = new codepipeline.Artifact();
         
         const pipeline = new pipelines.CdkPipeline(this, 'CdkPipeline', {
             crossAccountKeys: false,
@@ -104,7 +105,8 @@ export class SquareNumberCicdInfraStack extends cdk.Stack {
         const buildStage = pipeline.addStage('LambdaBuildAndZip');
 		buildStage.addActions(new codepipeline_actions.CodeBuildAction({
 			actionName: 'LambdaBuildAndZip',
-			input: sourceArtifact,
+            input: sourceArtifact,
+            outputs:[buildArtifact],
 			project: project
         }));
 
@@ -118,14 +120,13 @@ export class SquareNumberCicdInfraStack extends cdk.Stack {
         //     destinationBucket: lambdaBucket
         // })
 
-        const lambdaStage = new LambdaDeploymentStage(this, 'LambdaDeploymentStage');
-        pipeline.addApplicationStage(lambdaStage);
+     /*   const lambdaStage = new LambdaDeploymentStage(this, 'LambdaDeploymentStage');
+        pipeline.addApplicationStage(lambdaStage);*/
         // new SquareNumberLambdaStack(this, 'SquareNumberLambdaStack');
 
       
 		// const lambdaStage = new LambdaDeploymentStage(this, 'LambdaDeploy', {
-        //     s3Bucket: lambdaBucket,
-        //     s3CodeFile: 'lambda.zip'
+        //     s3CodeFile: buildArtifact.atPath('lambda.zip')
         // });
 		// pipeline.addApplicationStage(lambdaStage);
 
@@ -170,25 +171,24 @@ export class SquareNumberCicdInfraStack extends cdk.Stack {
 				},
 				build: {
 					commands: [
-						'echo Build started on `date`',
-                        'echo Building the Docker image...',
-                        `docker run --rm --volume "$(pwd)/:/src" --workdir "/src/" public.ecr.aws/o8l5c1i1/swift:5.3.2-amazonlinux2 swift build --product SquareNumber -c release -Xswiftc -static-stdlib`,
-                        `scripts/package.sh SquareNumber`
+						'echo Build started on `date`'//,
+                        // 'echo Building the Docker image...',
+                        // `docker run --rm --volume "$(pwd)/:/src" --workdir "/src/" public.ecr.aws/o8l5c1i1/swift:5.3.2-amazonlinux2 swift build --product SquareNumber -c release -Xswiftc -static-stdlib`,
+                        // `scripts/package.sh SquareNumber`
 					]
 				},
 				post_build: {
 					commands: [
-                        'echo Build completed on `date`',
-                        'echo copy zip file to cdk/',
-                        `cp .build/lambda/SquareNumber/lambda.zip cdk/`,
-                        `ls -al cdk/`
-                    ],
-                    artifacts: {
-                        files: ['lamda.zip']
-                    }                            
+                        'echo Build completed on `date`'//,
+                        // 'echo copy zip file to cdk/',
+                        // `cp .build/lambda/SquareNumber/lambda.zip cdk/`,
+                        // `ls -al cdk/`
+					]
 				}
-            }
+            }//,
+            // artifacts: {
+            //     files: ['lamda.zip']
+            // }
 		});
 	}
-
 }
