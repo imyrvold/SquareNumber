@@ -22,7 +22,8 @@ export class SquareNumberLambdaStack extends cdk.Stack {
   constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
-    const dockerfile = path.join(__dirname, './');
+    const dockerfile = '../';
+    // const dockerfile = path.join(__dirname, '../../');
     // const environment = {
     //   CGO_ENABLED: '0',
     //   GOOS: 'linux',
