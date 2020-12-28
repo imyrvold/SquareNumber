@@ -101,13 +101,13 @@ export class SquareNumberCicdInfraStack extends cdk.Stack {
 			buildSpec: this.getDockerBuildSpec(repository.repositoryUri)
         });
         
-        const buildStage = pipeline.addStage('LambdaBuildAndZip');
-		buildStage.addActions(new codepipeline_actions.CodeBuildAction({
-			actionName: 'LambdaBuildAndZip',
-            input: sourceArtifact,
-            outputs:[buildArtifact],
-			project: project
-        }));
+        // const buildStage = pipeline.addStage('LambdaBuildAndZip');
+		// buildStage.addActions(new codepipeline_actions.CodeBuildAction({
+		// 	actionName: 'LambdaBuildAndZip',
+        //     input: sourceArtifact,
+        //     outputs:[buildArtifact],
+		// 	project: project
+        // }));
 
         // Deploy - Local
         // const lambdaBucket = new s3.Bucket(this, 'LambdaZipBucket', {
