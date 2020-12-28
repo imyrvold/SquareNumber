@@ -14,6 +14,7 @@ export class SquareNumberLambdaStack extends cdk.Stack {
     const dockerfile = '../';
 
     const squareNumberLambdaFunction = new lambda.DockerImageFunction(this, 'SquareNumberLambdaFunction', {
+      functionName: 'SquareNumber',
       code: lambda.DockerImageCode.fromImageAsset(dockerfile)
     });
 
