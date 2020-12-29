@@ -26,7 +26,7 @@ export class SquareNumberLambdaStack extends cdk.Stack {
     const api = new apigatewayv2.HttpApi(this, 'SquareNumberApi', {
       createDefaultStage: true,
       corsPreflight: {
-        allowMethods: [ apigatewayv2.HttpMethod.ANY ],
+        allowMethods: [ apigatewayv2.HttpMethod.POST ],
         allowOrigins: ['*']
       }
     });
