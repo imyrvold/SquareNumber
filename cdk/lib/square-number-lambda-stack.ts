@@ -1,7 +1,8 @@
 import * as cdk from '@aws-cdk/core';
 import * as lambda from '@aws-cdk/aws-lambda';
-// import { LambdaProxyIntegration } from '@aws-cdk/aws-apigateway2';
 import * as apigatewayv2 from '@aws-cdk/aws-apigatewayv2';
+import { LambdaProxyIntegration } from '@aws-cdk/aws-apigatewayv2-integrations';
+import { CloudFrontWebDistribution } from '@aws-cdk/aws-cloudfront';
 
 import { CfnOutput } from '@aws-cdk/core';
 import * as s3 from '@aws-cdk/aws-s3';
@@ -18,23 +19,43 @@ export class SquareNumberLambdaStack extends cdk.Stack {
       code: lambda.DockerImageCode.fromImageAsset(dockerfile)
     });
 
-    // const api = new apigatewayv2.HttpApi(this, 'SquareNumberApi', {
-    //   createDefaultStage: true,
-    //   corsPreflight: {
-    //     allowMethods: [ apigatewayv2.HttpMethod.GET ],
-    //     allowOrigins: ['*']
-    //   }
-    // });
+    const httpApiIntegration = new LambdaProxyIntegration({
+      handler: squareNumberLambdaFunction,
+    });
 
-    // api.addRoutes({
-    //   path: '/hello',
-    //   integration: new apigatewayv2.LambdaProxyIntegration({
-    //     handler
-    //   }),
-    //   methods: [apigatewayv2.HttpMethod.GET]
-    // });
+    const api = new apigatewayv2.HttpApi(this, 'SquareNumberApi', {
+      createDefaultStage: true,
+      corsPreflight: {
+        allowMethods: [ apigatewayv2.HttpMethod.ANY ],
+        allowOrigins: ['*']
+      }
+    });
+
+    api.addRoutes({
+      path: '/number',
+      integration: httpApiIntegration,
+      methods: [apigatewayv2.HttpMethod.POST],
+      
+    });
 
     // new cdk.CfnOutput(this, 'ApiUrlOutput', { value: api.url! });
+
+    const feCf = new CloudFrontWebDistribution(this, "MyCf", {
+      defaultRootObject: "/",
+      originConfigs: [{
+        customOriginSource: {
+          domainName: `${api.httpApiId}.execute-api.${this.region}.${this.urlSuffix}`,
+        },
+        behaviors: [{
+          isDefaultBehavior: true,
+        }],
+      }],
+      enableIpV6: true,
+    });
+
+    new cdk.CfnOutput(this, "myOut", {
+      value: feCf.distributionDomainName,
+    });
   }
 }
 
